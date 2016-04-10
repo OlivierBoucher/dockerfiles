@@ -1,14 +1,14 @@
 ############################################################
 # Dockerfile to build protobuf3 enabled container images
-# Based on Alpine
+# Based on Wheezy
 ############################################################
 
-FROM golang:1.6-alpine
+FROM golang:1.6-wheezy
 
 MAINTAINER Olivier Boucher <info@olivierboucher.com>
 
 # Install required utilities
-RUN apk update && apk add curl unzip make git
+RUN apt-get update && apt-get install -y curl unzip make git
 
 # Install protoc beta from pre-compiled source
 RUN cd /tmp && \
@@ -16,12 +16,8 @@ RUN cd /tmp && \
     unzip protoc-3.0.0-beta-2-linux-x86_64.zip && \
     cp protoc /usr/local/bin/protoc
 
-RUN chmod +x /usr/local/bin/protoc
-
-RUN echo $PATH
-
 # Set working directory back to home since the golang images sets it to $GOPATH
 WORKDIR ~/
 
 # Override entrypoint to use bash
-ENTRYPOINT ["/bin/sh", "-c"]
+ENTRYPOINT ["/bin/bash", "-c"]
