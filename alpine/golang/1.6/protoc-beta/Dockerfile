@@ -5,7 +5,7 @@
 
 FROM golang:1.6-alpine
 
-MAINTAINER olivierboucher
+MAINTAINER Olivier Boucher <info@olivierboucher.com>
 
 # Install required utilities
 RUN apk update && apk add curl unzip
