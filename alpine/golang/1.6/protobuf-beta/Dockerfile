@@ -19,10 +19,11 @@ RUN cd /tmp && \
     ./configure && \
     make && \
     make check && \
-    make install
-
-RUN rm -rf /tmp/protobuf
-
+    make install && \
+    rm -rf /tmp/* && \
+    rm /usr/local/lib/libproto* && \
+    apk del libtool automake autoconf g++
+    
 # Set working directory back to home since the golang images sets it to $GOPATH
 WORKDIR ~/
 
