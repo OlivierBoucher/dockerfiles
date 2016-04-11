@@ -8,17 +8,20 @@ FROM golang:1.6-alpine
 MAINTAINER Olivier Boucher <info@olivierboucher.com>
 
 # Install required utilities
-RUN apk update && apk add curl unzip make git
+RUN apk update && apk add curl unzip make git libtool automake autoconf g++
 
-# Install protoc beta from pre-compiled source
+# Get and compile protoc beta
 RUN cd /tmp && \
-    curl -LOk https://github.com/google/protobuf/releases/download/v3.0.0-beta-2/protoc-3.0.0-beta-2-linux-x86_64.zip && \
-    unzip protoc-3.0.0-beta-2-linux-x86_64.zip && \
-    cp protoc /usr/local/bin/protoc
+    git clone https://github.com/google/protobuf.git && \
+    cd protobuf && \
+    git checkout v3.0.0-beta-2 && \
+    ./autogen.sh && \
+    ./configure && \
+    make && \
+    make check && \
+    make install
 
-RUN chmod +x /usr/local/bin/protoc
-
-RUN echo $PATH
+RUN rm -rf /tmp/protobuf
 
 # Set working directory back to home since the golang images sets it to $GOPATH
 WORKDIR ~/
